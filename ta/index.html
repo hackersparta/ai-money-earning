@@ -26,6 +26,17 @@ fbq('track','PageView');
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AI மூலம் பணம் சம்பாதியுங்கள் | Learn AI Today</title>
 <meta name="description" content="AI கருவிகள் கற்றுக்கொண்டு வீட்டிலிருந்தே பணம் சம்பாதியுங்கள். ₹49 மட்டுமே. Live Zoom Workshop."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://ai-money-earning.vercel.app/ta"/>
+<meta property="og:title" content="AI மூலம் பணம் சம்பாதியுங்கள் – ₹49 Live Workshop"/>
+<meta property="og:description" content="10+ AI Tools கற்றுக்கொண்டு வீட்டிலிருந்தே பணம் சம்பாதியுங்கள். 1 மணி நேர Live Zoom Workshop. இப்போதே பதிவு செய்யுங்கள்!"/>
+<meta property="og:image" content="https://ai-money-earning.vercel.app/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="AI மூலம் பணம் சம்பாதியுங்கள் – ₹49 Workshop"/>
+<meta name="twitter:description" content="10+ AI Tools கற்றுக்கொண்டு வீட்டிலிருந்தே சம்பாதியுங்கள்"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://d31bwppm8yl9g2.cloudfront.net"/>
+<link rel="preconnect" href="https://connect.facebook.net"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -544,6 +555,8 @@ params.forEach(function(p){
 })();
 
 // Lead Form Handler
+var GOOGLE_SCRIPT_URL = ''; // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+
 function handleLeadSubmit(e){
   e.preventDefault();
   var btn=document.getElementById('leadBtn');
@@ -559,16 +572,28 @@ function handleLeadSubmit(e){
   if(typeof gtag==='function'){
     gtag('event','generate_lead',{method:'landing_page',language:'ta'});
   }
-  // Store lead in localStorage
+  // Collect UTM params
+  var utms={};
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
+    utms[k]=localStorage.getItem(k)||'';
+  });
+  // Store lead in localStorage as backup
   try{
     var leads=JSON.parse(localStorage.getItem('ai_money_leads')||'[]');
-    var utms={};
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){
-      utms[k]=localStorage.getItem(k)||'';
-    });
     leads.push({name:name,email:email,phone:phone,lang:'ta',ts:new Date().toISOString(),utms:utms});
     localStorage.setItem('ai_money_leads',JSON.stringify(leads));
   }catch(err){}
+  // Send to Google Sheets backend
+  if(GOOGLE_SCRIPT_URL){
+    try{
+      fetch(GOOGLE_SCRIPT_URL,{
+        method:'POST',
+        mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:name,email:email,phone:phone,lang:'ta',utm_source:utms.utm_source,utm_medium:utms.utm_medium,utm_campaign:utms.utm_campaign,utm_content:utms.utm_content,utm_term:utms.utm_term})
+      });
+    }catch(err){}
+  }
   // Redirect to thank-you page
   setTimeout(function(){
     window.location.href='/thank-you/?lang=ta&name='+encodeURIComponent(name)+'&email='+encodeURIComponent(email);

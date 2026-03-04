@@ -23,6 +23,17 @@ fbq('track','PageView');
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Earn Money Using AI | Learn AI Today</title>
 <meta name="description" content="Learn 10+ AI tools and start earning from home. Just Rs.49. Live Zoom Workshop by Learn AI Today."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://ai-money-earning.vercel.app/en"/>
+<meta property="og:title" content="Earn Money Using AI – Rs.49 Live Workshop"/>
+<meta property="og:description" content="Learn 10+ AI tools and start earning from home. 1-hour Live Zoom Workshop. Register FREE now!"/>
+<meta property="og:image" content="https://ai-money-earning.vercel.app/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Earn Money Using AI – Rs.49 Workshop"/>
+<meta name="twitter:description" content="Learn 10+ AI tools and start earning from home"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://d31bwppm8yl9g2.cloudfront.net"/>
+<link rel="preconnect" href="https://connect.facebook.net"/>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -506,6 +517,8 @@ var sp=new URLSearchParams(window.location.search);
 params.forEach(function(p){var v=sp.get(p);if(v)localStorage.setItem(p,v);});
 })();
 
+var GOOGLE_SCRIPT_URL = ''; // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE
+
 function handleLeadSubmit(e){
   e.preventDefault();
   var btn=document.getElementById('leadBtn');
@@ -515,13 +528,21 @@ function handleLeadSubmit(e){
   var phone=document.getElementById('leadPhone').value;
   if(typeof fbq==='function'){fbq('track','Lead',{content_name:'ai-money-en',currency:'INR',value:0});}
   if(typeof gtag==='function'){gtag('event','generate_lead',{method:'landing_page',language:'en'});}
+  var utms={};
+  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){utms[k]=localStorage.getItem(k)||'';});
   try{
     var leads=JSON.parse(localStorage.getItem('ai_money_leads')||'[]');
-    var utms={};
-    ['utm_source','utm_medium','utm_campaign','utm_content','utm_term'].forEach(function(k){utms[k]=localStorage.getItem(k)||'';});
     leads.push({name:name,email:email,phone:phone,lang:'en',ts:new Date().toISOString(),utms:utms});
     localStorage.setItem('ai_money_leads',JSON.stringify(leads));
   }catch(err){}
+  if(GOOGLE_SCRIPT_URL){
+    try{
+      fetch(GOOGLE_SCRIPT_URL,{
+        method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:name,email:email,phone:phone,lang:'en',utm_source:utms.utm_source,utm_medium:utms.utm_medium,utm_campaign:utms.utm_campaign,utm_content:utms.utm_content,utm_term:utms.utm_term})
+      });
+    }catch(err){}
+  }
   setTimeout(function(){
     window.location.href='/thank-you/?lang=en&name='+encodeURIComponent(name)+'&email='+encodeURIComponent(email);
   },500);
