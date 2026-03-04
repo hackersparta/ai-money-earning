@@ -1,0 +1,18 @@
+{
+  "rewrites": [
+    { "source": "/ta", "destination": "/ta/index.html" },
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/thank-you", "destination": "/thank-you/index.html" },
+    { "source": "/privacy", "destination": "/privacy-policy.html" },
+    { "source": "/", "destination": "/ta/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    }
+  ]
+}
