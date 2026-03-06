@@ -556,7 +556,7 @@ function toggleFaq(el){
   else{a.style.maxHeight=a.scrollHeight+'px';if(svg)svg.style.transform='rotate(180deg)';}
 }
 function getNextSunday(){
-  var now=new Date();var day=now.getDay();var diff=0-day;if(diff<=0)diff+=7;
+  var now=new Date();var day=now.getDay();var diff=0-day;if(diff<0)diff+=7;
   var sun=new Date(now);sun.setDate(now.getDate()+diff);sun.setHours(18,0,0,0);
   if(sun<=now)sun.setDate(sun.getDate()+7);return sun;
 }

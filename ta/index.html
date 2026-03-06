@@ -624,7 +624,7 @@ function getNextSunday(){
   var now=new Date();
   var day=now.getDay();
   var diff=0-day;
-  if(diff<=0)diff+=7;
+  if(diff<0)diff+=7;
   var sun=new Date(now);
   sun.setDate(now.getDate()+diff);
   sun.setHours(18,0,0,0); // 6 PM IST
