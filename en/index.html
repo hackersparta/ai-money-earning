@@ -101,7 +101,7 @@ No coding. No degree. Start earning from Day 1.
 <div class="flex flex-wrap items-center justify-center gap-3 mb-6 relative z-10">
 <div class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/></svg>
-<span id="workshopDate">This Saturday</span>
+<span id="workshopDate">This Sunday</span>
 </div>
 <div class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -555,13 +555,13 @@ function toggleFaq(el){
   if(a.style.maxHeight&&a.style.maxHeight!=='0px'){a.style.maxHeight='0px';if(svg)svg.style.transform='rotate(0deg)';}
   else{a.style.maxHeight=a.scrollHeight+'px';if(svg)svg.style.transform='rotate(180deg)';}
 }
-function getNextSaturday(){
-  var now=new Date();var day=now.getDay();var diff=6-day;if(diff<=0)diff+=7;
-  var sat=new Date(now);sat.setDate(now.getDate()+diff);sat.setHours(18,0,0,0);
-  if(sat<=now)sat.setDate(sat.getDate()+7);return sat;
+function getNextSunday(){
+  var now=new Date();var day=now.getDay();var diff=0-day;if(diff<=0)diff+=7;
+  var sun=new Date(now);sun.setDate(now.getDate()+diff);sun.setHours(18,0,0,0);
+  if(sun<=now)sun.setDate(sun.getDate()+7);return sun;
 }
 function updateCountdown(){
-  var target=getNextSaturday();var now=new Date();var dist=target-now;
+  var target=getNextSunday();var now=new Date();var dist=target-now;
   if(dist<0){document.getElementById('countdown').textContent='Starting Soon!';document.getElementById('stickyCountdown').textContent='Starting Soon!';return;}
   var d=Math.floor(dist/(1000*60*60*24));var h=Math.floor((dist%(1000*60*60*24))/(1000*60*60));
   var m=Math.floor((dist%(1000*60*60))/(1000*60));var s=Math.floor((dist%(1000*60))/1000);
@@ -570,7 +570,7 @@ function updateCountdown(){
   document.getElementById('stickyCountdown').textContent='Workshop: '+text+' left';
   var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   var el=document.getElementById('workshopDate');
-  if(el)el.textContent=target.getDate()+' '+months[target.getMonth()]+' Saturday';
+  if(el)el.textContent=target.getDate()+' '+months[target.getMonth()]+' Sunday';
 }
 updateCountdown();setInterval(updateCountdown,1000);
 </script>

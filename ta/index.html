@@ -111,7 +111,7 @@ Coding தேவையில்லை. Degree தேவையில்லை. 1 
 <div class="flex flex-wrap items-center justify-center gap-3 mb-6 relative z-10">
 <div class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/></svg>
-<span id="workshopDate">இந்த சனிக்கிழமை</span>
+<span id="workshopDate">இந்த ஞாயிற்றுக்கிழமை</span>
 </div>
 <div class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -619,23 +619,23 @@ function toggleFaq(el){
   }
 }
 
-// Countdown Timer (evergreen - next Saturday)
-function getNextSaturday(){
+// Countdown Timer (evergreen - next Sunday)
+function getNextSunday(){
   var now=new Date();
   var day=now.getDay();
-  var diff=6-day;
+  var diff=0-day;
   if(diff<=0)diff+=7;
-  var sat=new Date(now);
-  sat.setDate(now.getDate()+diff);
-  sat.setHours(18,0,0,0); // 6 PM IST
-  if(sat<=now){
-    sat.setDate(sat.getDate()+7);
+  var sun=new Date(now);
+  sun.setDate(now.getDate()+diff);
+  sun.setHours(18,0,0,0); // 6 PM IST
+  if(sun<=now){
+    sun.setDate(sun.getDate()+7);
   }
-  return sat;
+  return sun;
 }
 
 function updateCountdown(){
-  var target=getNextSaturday();
+  var target=getNextSunday();
   var now=new Date();
   var dist=target-now;
   if(dist<0){
@@ -653,7 +653,7 @@ function updateCountdown(){
 
   // Update date badge
   var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var dateStr=target.getDate()+' '+months[target.getMonth()]+' Saturday';
+  var dateStr=target.getDate()+' '+months[target.getMonth()]+' Sunday';
   var el=document.getElementById('workshopDate');
   if(el)el.textContent=dateStr;
 }
