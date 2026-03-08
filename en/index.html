@@ -43,6 +43,9 @@ body{font-family:'IBM Plex Sans',system-ui,sans-serif}
 .lead-close{position:absolute;top:12px;right:16px;font-size:24px;cursor:pointer;color:#666;background:none;border:none;line-height:1}
 .glow-btn{background:linear-gradient(128deg,#4e9f3d,#afc570);box-shadow:0 0 15px 10px rgba(78,159,61,0.6);transition:all 0.3s}
 .glow-btn:hover{box-shadow:0 0 20px 15px rgba(78,159,61,0.7)}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 15px 5px rgba(78,159,61,0.5)}50%{box-shadow:0 0 25px 15px rgba(78,159,61,0.8)}}
+.pulse-btn{animation:pulse-glow 2s ease-in-out infinite}
+.sticky-pulse{animation:pulse-glow 1.5s ease-in-out infinite}
 </style>
 </head>
 <body class="antialiased bg-white">
@@ -110,10 +113,17 @@ No coding. No degree. Start earning from Day 1.
 <p class="text-2xl md:text-3xl font-bold text-[#1E5128]" id="countdown">Loading...</p>
 </div>
 
-<a href="#" onclick="openLeadModal(event)" class="glow-btn text-white text-xl font-semibold px-10 py-4 rounded-full w-[90%] md:w-96 relative z-10 cursor-pointer text-center block mb-4">
-Register FREE &#10132;
-</a>
-<p class="text-sm text-gray-500 relative z-10 mb-8">&#128274; 3,247+ people already registered</p>
+<!-- INLINE REGISTRATION FORM (Hero) -->
+<div class="w-[90%] md:w-96 relative z-10 bg-white border-2 border-[#4E9F3D] rounded-2xl p-5 shadow-xl mb-4" id="heroForm">
+<p class="text-center font-bold text-lg mb-3">&#127919; Reserve Your FREE Seat</p>
+<form id="heroLeadForm" onsubmit="return handleLeadSubmit(event,'hero')">
+<input type="text" id="heroName" placeholder="Your Name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg text-base mb-2 outline-none focus:border-[#4E9F3D]"/>
+<input type="tel" id="heroPhone" placeholder="WhatsApp Number" pattern="[0-9]{10}" title="Enter 10-digit number" required class="w-full px-4 py-3 border border-gray-300 rounded-lg text-base mb-3 outline-none focus:border-[#4E9F3D]"/>
+<button type="submit" class="glow-btn w-full text-white text-lg font-semibold py-3 rounded-full cursor-pointer pulse-btn" id="heroBtn">Register FREE &#10132;</button>
+</form>
+<p class="text-center text-xs text-gray-400 mt-2">&#128274; Zoom link sent via WhatsApp instantly</p>
+</div>
+<p class="text-sm text-gray-500 relative z-10 mb-4">&#128274; 3,247+ people already registered</p>
 
 <div class="flex items-center justify-center gap-4 relative z-10 mb-8">
 <div class="flex items-center bg-[#DBEEBA] shadow-md rounded-lg p-3 border border-[#A6A6A6]">
@@ -459,7 +469,7 @@ Learn AI Today by Nirmal Sistiny<br/>
 <p class="text-xl md:text-2xl font-bold text-[#1E5128]">FREE Workshop <span class="text-sm text-red-600 font-bold">Limited Seats!</span></p>
 <p class="text-xs md:text-sm text-gray-700" id="stickyCountdown">Loading...</p>
 </div>
-<a href="#" onclick="openLeadModal(event)" class="text-white text-sm md:text-lg font-semibold px-6 py-3 rounded-full cursor-pointer hover:opacity-90 transition text-center" style="background:linear-gradient(128deg,#4e9f3d,#afc570)">
+<a href="#" onclick="openLeadModal(event)" class="text-white text-sm md:text-lg font-semibold px-6 py-3 rounded-full cursor-pointer hover:opacity-90 transition text-center sticky-pulse" style="background:linear-gradient(128deg,#4e9f3d,#afc570)">
 Register FREE &#10132;
 </a>
 </div>
@@ -467,18 +477,17 @@ Register FREE &#10132;
 <!-- LEAD MODAL -->
 <div class="lead-overlay" id="leadModal">
 <div class="lead-box">
-<button class="lead-close" onclick="document.getElementById('leadModal').classList.remove('active')">&times;</button>
+<button class="lead-close" onclick="document.getElementById('leadModal').classList.remove('active');window.__modalDismissed=true">&times;</button>
 <div style="text-align:center;margin-bottom:20px">
-<h2 style="font-size:22px;font-weight:700;margin-bottom:4px">Register for FREE &#127919;</h2>
-<p style="color:#666;font-size:14px">Fill in your details to reserve your seat</p>
+<h2 style="font-size:22px;font-weight:700;margin-bottom:4px">&#9888;&#65039; Don't Miss Out!</h2>
+<p style="color:#666;font-size:14px">Only a few seats left. Register in 10 seconds:</p>
 </div>
-<form id="leadForm" onsubmit="return handleLeadSubmit(event)">
-<input type="text" id="leadName" placeholder="Full Name" required/>
-<input type="email" id="leadEmail" placeholder="Email Address" required/>
+<form id="leadForm" onsubmit="return handleLeadSubmit(event,'modal')">
+<input type="text" id="leadName" placeholder="Your Name" required/>
 <input type="tel" id="leadPhone" placeholder="WhatsApp Number" pattern="[0-9]{10}" title="Enter 10-digit mobile number" required/>
-<button type="submit" class="lead-btn" id="leadBtn">Register FREE &#10132;</button>
+<button type="submit" class="lead-btn pulse-btn" id="leadBtn">Get FREE Access &#10132;</button>
 </form>
-<p style="text-align:center;margin-top:12px;font-size:12px;color:#999">&#128274; Your info is safe. Workshop details sent via WhatsApp.</p>
+<p style="text-align:center;margin-top:12px;font-size:12px;color:#999">&#128274; Zoom link sent to WhatsApp instantly. No spam.</p>
 </div>
 </div>
 
@@ -491,13 +500,14 @@ params.forEach(function(p){var v=sp.get(p);if(v)localStorage.setItem(p,v);});
 
 var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPVOxf55GRYFh4koKDGFLWd-XmDIuS5GX5596dxxX5dcObmk2vvjw7Gt_KWRaHwfkF/exec';
 
-function handleLeadSubmit(e){
+function handleLeadSubmit(e,src){
   e.preventDefault();
-  var btn=document.getElementById('leadBtn');
+  src=src||'modal';
+  var btn=src==='hero'?document.getElementById('heroBtn'):document.getElementById('leadBtn');
   btn.disabled=true;btn.textContent='Registering...';
-  var name=document.getElementById('leadName').value;
-  var email=document.getElementById('leadEmail').value;
-  var phone=document.getElementById('leadPhone').value;
+  var name=src==='hero'?document.getElementById('heroName').value:document.getElementById('leadName').value;
+  var email='';
+  var phone=src==='hero'?document.getElementById('heroPhone').value:document.getElementById('leadPhone').value;
   if(typeof fbq==='function'){fbq('track','Lead',{content_name:'ai-money-en',currency:'INR',value:0});}
   if(typeof gtag==='function'){gtag('event','generate_lead',{method:'landing_page',language:'en'});}
   var utms={};
@@ -545,6 +555,27 @@ function updateCountdown(){
   if(el)el.textContent=target.getDate()+' '+months[target.getMonth()]+' Sunday';
 }
 updateCountdown();setInterval(updateCountdown,1000);
+
+// AUTO-POPUP after 8 seconds (if not already registered)
+window.__modalDismissed=false;
+setTimeout(function(){
+  if(!window.__modalDismissed && !window.__registered){
+    var modal=document.getElementById('leadModal');
+    if(modal && !modal.classList.contains('active')) modal.classList.add('active');
+  }
+},8000);
+
+// EXIT-INTENT on mobile (scroll up rapidly)
+var lastScrollY=0;
+window.addEventListener('scroll',function(){
+  var currentY=window.scrollY||window.pageYOffset;
+  if(currentY<lastScrollY-80 && currentY>200 && !window.__modalDismissed && !window.__registered){
+    var modal=document.getElementById('leadModal');
+    if(modal && !modal.classList.contains('active')){modal.classList.add('active');window.__modalDismissed=true;}
+  }
+  lastScrollY=currentY;
+});
+
 // Deferred tracking scripts (loaded after page render)
 window.addEventListener('load',function(){
 var gs=document.createElement('script');gs.async=true;gs.src='https://www.googletagmanager.com/gtag/js?id=G-LHP623TWGV';document.head.appendChild(gs);
